@@ -27,6 +27,7 @@
 <script>
 import path from 'path'
 import { isExternal } from '@/utils/validate'
+//Item组件【侧边栏每一小项----激活路由组件的地方】的父组件
 import Item from './Item'
 import AppLink from './Link'
 import FixiOSBug from './FixiOSBug'

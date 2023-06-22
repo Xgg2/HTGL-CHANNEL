@@ -31,7 +31,9 @@ export default {
       'sidebar'
     ]),
     routes() {
-      return this.$router.options.routes
+      // console.log(this.$router.options.routes);//这个是常量路由
+      // return this.$router.options.routes
+      return this.$store.state.user.resultAllRouters
     },
     activeMenu() {
       const route = this.$route

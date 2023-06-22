@@ -14,7 +14,13 @@ import router from './router'
 
 import '@/icons' // icon
 import '@/permission' // permission control
-
+import api from "@/api/api";
+//三级联动下拉菜单组件
+import Selectlist from "@/components/SelectList/Selectlist";
+//引入Hintbutton组件展示title属性的
+import Hintbutton from "@/components/Hintbutton/Hintbutton";
+//注册为全局组件
+Vue.component(Hintbutton.name,Hintbutton);
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -34,10 +40,15 @@ Vue.use(ElementUI, { locale })
 // Vue.use(ElementUI)
 
 Vue.config.productionTip = false
-
+//将三级下拉菜单注册为全局组件
+Vue.component(Selectlist.name,Selectlist);//这里直接拿的组件中的名字
 new Vue({
   el: '#app',
   router,
   store,
+  beforeCreate() {
+    Vue.prototype.$API=api;//把所有product模块中【每个组件的统一并在一起】所有的接口放到Vue原型对象上
+  },
   render: h => h(App)
 })
+// console.log(process.env);//可以拿到当前是什么环境 【开发，测试，上线】

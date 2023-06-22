@@ -1,6 +1,7 @@
 <template>
   <section class="app-main">
     <transition name="fade-transform" mode="out-in">
+      <!--在这里展示对应的路由组件  【就是那个大框】-->
       <router-view :key="key" />
     </transition>
   </section>

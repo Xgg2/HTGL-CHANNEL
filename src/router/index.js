@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
+import store from "@/store";
 Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
+import user from "@/store/modules/user";
+import list from "@/views/acl/user/list";
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -30,6 +32,7 @@ import Layout from '@/layout'
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
+//常量路由
 export const constantRoutes = [
   {
     path: '/login',
@@ -46,131 +49,130 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: '/dashboard',//设置二级路由组件的重定向
     children: [{
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: '首页', icon: 'dashboard' }
     }]
   },
 
+]
+//异步路由
+export let asyncRouters=[
   {
-    path: '/example',
+    path: '/product',
     component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'el-icon-s-help' },
+    name:'Product',
+    meta: { title: '商品管理',icon: 'el-icon-goods'},
     children: [
       {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        name:'Trademark',
+        component:()=>import('@/views/product/trademark/Trademark.vue'),
+        path: 'trademark',
+        meta: { title: '品牌管理'}
       },
       {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
-      }
-    ]
-  },
-
-  {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
-      }
-    ]
-  },
-
-  {
-    path: '/nested',
-    component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
-    meta: {
-      title: 'Nested',
-      icon: 'nested'
-    },
-    children: [
-      {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: 'Menu1' },
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/nested/menu1/menu1-1'),
-            name: 'Menu1-1',
-            meta: { title: 'Menu1-1' }
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/nested/menu1/menu1-2'),
-            name: 'Menu1-2',
-            meta: { title: 'Menu1-2' },
-            children: [
-              {
-                path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                name: 'Menu1-2-1',
-                meta: { title: 'Menu1-2-1' }
-              },
-              {
-                path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                name: 'Menu1-2-2',
-                meta: { title: 'Menu1-2-2' }
-              }
-            ]
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/nested/menu1/menu1-3'),
-            name: 'Menu1-3',
-            meta: { title: 'Menu1-3' }
-          }
-        ]
+        name:'Attr',
+        component:()=>import('@/views/product/Attr/Attr.vue'),
+        path: 'attr',
+        meta: { title: '平台属性管理'}
       },
       {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        name: 'Menu2',
-        meta: { title: 'menu2' }
-      }
+        name:'Spu',
+        component:()=>import('@/views/product/Spu/Spu.vue'),
+        path: 'Spu',
+        meta: { title: 'Spu管理'}
+      },
+      {
+        name:'Sku',
+        component:()=>import('@/views/product/Sku/Sku.vue'),
+        path: 'Sku',
+        meta: { title: 'Sku管理'}
+      },
     ]
   },
 
   {
-    path: 'external-link',
-    component: Layout,
+    path: '/acl',
+    name:'Acl',
+    component:()=>import('@/layout'),
+    redirect: '/acl/user/list',
+    meta: {title: '权限管理',icon:'el-icon-lock'},
     children: [
       {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
+        name:'User',
+        path: '/acl/user/list',
+        component:()=>import('@/views/acl/user/list'),
+        meta: {title: '用户管理'}
+
+      },
+      {
+        name:'Role',
+        path: '/acl/role/list',
+        component:()=>import('@/views/acl/role/list'),
+        meta: {title: '角色管理'},
+      },
+      {
+        name: 'RoleAuth',
+        path: '/acl/role/auth/:id',
+        component:()=>import('@/views/acl/role/roleAuth'),
+        meta: {title: '角色授权'},
+        hidden:true
+      },
+      {
+        name: 'Permission',
+        path: '/acl/permission/list',
+        component:()=>import('@/views/acl/permission/list'),
+        meta: {title: '菜单管理'}
       }
     ]
   },
+  {
+    path: '/test',
+    name:'Test',
+    component:()=>import('@/layout'),
+    redirect: '/test/test1',
+    meta: {title: '测试',icon: 'el-icon-s-flag'},
+    children: [
+      {
+        name:'Test1',
+        path: '/test/test1',
+        component:()=>import('@/views/test/Test1'),
+        meta: {title: '测试按钮1'}
 
-  // 404 page must be placed at the end !!!
+      },
+      {
+        name:'Test2',
+        path: '/test/test2',
+        component:()=>import('@/views/test/Test2'),
+        meta: {title: '测试按钮2'},
+      },
+    ]
+  },
+]
+//任意路由
+export let autoRouters=[
+  // 404 page must be placed at the end !!!  重定向到404
   { path: '*', redirect: '/404', hidden: true }
 ]
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
+  scrollBehavior: () => ({ y: 0 }),//滚动条位置
+  routes: constantRoutes  //引入所有路由组件配置
 })
 
 const router = createRouter()
+// router.selfaddRoutes = function (params){
+//   router.matcher = new Router({ mode: 'hash' }).matcher;
+//   router.addRoutes(params)
+// }
+// router.beforeEach((to,from,next)=>{
+//   next({...to,replace:true})
+// })
+// 设置flag，防止非权限路由，页面死循环重定向
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {

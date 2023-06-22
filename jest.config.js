@@ -1,3 +1,4 @@
+//测试框架配置文件
 module.exports = {
   moduleFileExtensions: ['js', 'jsx', 'json', 'vue'],
   transform: {

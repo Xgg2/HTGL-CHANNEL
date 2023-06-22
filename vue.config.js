@@ -1,4 +1,5 @@
 'use strict'
+
 const path = require('path')
 const defaultSettings = require('./src/settings.js')
 
@@ -36,7 +37,22 @@ module.exports = {
       warnings: false,
       errors: true
     },
-    before: require('./mock/mock-server.js')
+    proxy:{
+      //可以在开发阶段环境配置文件中修改这个控制是否走代理的代理路径
+      //请求的路径中会自动带上 初始化axios使用baseURL，利用它控制是否走代理，但是服务器不需要，要进行替换
+      '/dev-api/api1':{ //注意：【把这个代理提到了 /dev-api的上面，由于正则匹配，/dev-api也满足条件，如果写在上面，就不会走下面这个代理个（本次代理了）所以预览中path有/api1而没有/dev-api了】
+        target: 'http://39.98.123.211:8510/',
+        pathRewrite: {'^/dev-api/api1':''}
+      },
+      '/dev-api':{
+        target:'http://39.98.123.211:8170/',
+        pathRewrite:{'^/dev-api':''}
+      },
+    },
+    after:require('./mock/mock-server')
+   // devServer: {
+   //
+   // }
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that

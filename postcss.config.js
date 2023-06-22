@@ -6,3 +6,4 @@ module.exports = {
     'autoprefixer': {}
   }
 }
+//处理兼容

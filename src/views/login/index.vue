@@ -1,15 +1,17 @@
 <template>
   <div class="login-container">
+    <!--  使用的element-ui表单组件  -->
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
         <h3 class="title">Login Form</h3>
       </div>
-
+      <!--小图标-->
       <el-form-item prop="username">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
+        <!--收集表单元素（用户名）-->
         <el-input
           ref="username"
           v-model="loginForm.username"
@@ -25,6 +27,8 @@
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
+        <!--选中组件元素，收集表单元素（密码），给组件绑定原生事件，使用了.native让组件上的原生事件起作用（不会被当作自定义事件）-->
+        <!--:type="passwordType" 点击修改输入框的类型【普通输入框/密码框】【是否展示密码】-->
         <el-input
           :key="passwordType"
           ref="password"
@@ -37,10 +41,12 @@
           @keyup.enter.native="handleLogin"
         />
         <span class="show-pwd" @click="showPwd">
+          <!--根据第二个输入框的类型，判断，展示的icon图标【是否展示密码】-->
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
 
+      <!--组件上使用的原生事件，必须使用.native修饰符【不然就会被当做自定义事件】-->
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
 
       <div class="tips">
@@ -73,6 +79,7 @@ export default {
       }
     }
     return {
+      //双向绑定，流向页面，收集数据
       loginForm: {
         username: 'admin',
         password: '111111'
@@ -101,20 +108,27 @@ export default {
       } else {
         this.passwordType = 'password'
       }
+      //在下一次事件循环之后操作dom，获取焦点
       this.$nextTick(() => {
         this.$refs.password.focus()
       })
     },
     handleLogin() {
-      this.$refs.loginForm.validate(valid => {
+      //是否满足条件  ，满足条件valid就是true
+      this.$refs.loginForm.validate(async valid => {
         if (valid) {
+          //展示加载图标
           this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
-            this.loading = false
-          }).catch(() => {
-            this.loading = false
-          })
+          //联系actions并传入数据，发请求，使用then与catch处理返回的状态
+          try {
+            await this.$store.dispatch('user/login', this.loginForm)
+            //成功进行路由跳转
+            this.$router.push({ path: this.redirect || '/' });
+            this.loading=false;
+          }
+         catch (err){
+            this.loading=false;
+         }
         } else {
           console.log('error submit!!')
           return false
@@ -180,7 +194,9 @@ $light_gray:#eee;
 .login-container {
   min-height: 100%;
   width: 100%;
-  background-color: $bg;
+  //background-color: pink;
+  background-image: url("../../assets/日出.jpg");
+  background-size: 100% 100%;
   overflow: hidden;
 
   .login-form {

@@ -33,8 +33,8 @@ function unregisterRoutes() {
 
 // for mock server
 const responseFake = (url, type, respond) => {
-  return {
-    url: new RegExp(`${process.env.VUE_APP_BASE_API}${url}`),
+  return {                                    //mock数据就不能使用原始的这个了VUE_APP_BASE_API【会找真实的服务器要数据】
+    url: new RegExp(`${process.env.VUE_APP_MOCK_API}${url}`),
     type: type || 'get',
     response(req, res) {
       console.log('request invoke:' + req.path)
