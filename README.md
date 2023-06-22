@@ -651,3 +651,23 @@ admin 用户 所有
 根据服务器返回的数据buttons【角色对应的按钮权限】，使用v-show在服务器返回的按钮权限的数组中查找此按钮是否有【indexOf()】，有就显示此按钮，没有就隐藏此按钮
 以test1 test2 test3测试按钮为例，BOSS这个角色在服务器返回的buttons按钮权限的数据中，有'btn.Add1' 'btn.Add2' 'btn.Add3' ，在buttonsindexOf()可以查找到，v-show按钮就可以显示
 普通管理员，buttons只有'btn.Add1' ，所以indexOf() 查找到'btn.Add1'只有测试按钮1会显示，其他的查找不到为false，就会隐藏。
+
+###
+使用自己的github账号登录，并且推送的，在自己的账号中，项目一直是小号commit的，查看了团队及组织，删除了修改了windows凭据依然不起作用；
+于是修改了自己git的用户名，密码，以及邮箱改成了自己大号的。就可以显示自己大号commit了
+
+一、查看
+查看用户名 ：git config user.name
+查看密码： git config user.password
+查看邮箱：git config user.email
+查看配置信息： $ git config --list
+
+二、修改
+修改用户名
+git config --global user.name “xxxx(新的用户名)”
+
+修改密码
+git config --global user.password “xxxx(新的密码)”
+
+修改邮箱
+git config --global user.email “xxxx@xxx.com(新的邮箱)”
